@@ -21,15 +21,19 @@ public class TokenValidationFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext context) {
-        final String token = request.getHeader(ApplicationConstants.TOKEN_KEY);
-
-        if (token == null || !token.equals(System.getenv(ApplicationConstants.TOKEN_KEY))) {
+        if (!isValid(request)) {
             context.abortWith(Response
                     .status(Response.Status.FORBIDDEN)
                     .entity("No access")
                     .build());
             LOG.warnf("Bad token in request from %s.",
-                    request.remoteAddress());
+                    AddressResolver.resolve(request));
         }
+    }
+
+    private boolean isValid(HttpServerRequest request) {
+        final String token = request.getHeader(ApplicationConstants.TOKEN_KEY);
+        return token != null
+                && token.equals(System.getenv(ApplicationConstants.TOKEN_KEY));
     }
 }

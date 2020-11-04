@@ -1,7 +1,6 @@
 package org.acme.filters;
 
 import io.vertx.core.http.HttpServerRequest;
-import io.vertx.core.net.SocketAddress;
 import org.jboss.logging.Logger;
 
 import javax.annotation.Priority;
@@ -27,7 +26,7 @@ public class LoggingFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext context) {
         final String method = context.getMethod();
         final String path = info.getPath();
-        final SocketAddress address = request.remoteAddress();
+        final String address = AddressResolver.resolve(request);
 
         LOG.infof("Request %s %s from IP %s", method, path, address);
     }
