@@ -10,6 +10,7 @@ import org.acme.resources.location.Location;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -33,7 +34,7 @@ public class RestaurantResource {
     }
 
     @GET
-    public OpenRestaurantResponse getOpenRestaurant() {
+    public OpenRestaurantResponse getOpenRestaurant(@HeaderParam(ApplicationConstants.TOKEN_KEY) final String token) {
         List<Restaurant> restaurants = new ArrayList<>();
         final Location location = getRandomLocation();
         try {
